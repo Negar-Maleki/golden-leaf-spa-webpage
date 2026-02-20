@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  name          String?
+  passwordHash  String?   // null for OAuth-only users
+  googleId      String?   @unique // for Google OAuth
+  githubId      String?   @unique // for GitHub OAuth
+  role          String    @default("user") // "user", "admin", etc.
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  avatar        String?
+}
+
+model Service {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  duration    Int          // in minutes
+  imageUrl    String?
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?      @updatedAt
+  bookings    Booking[]
+}
+
+model Customer {
+  id         Int        @id @default(autoincrement())
+  name       String
+  email      String     @unique
+  phone      String?
+  notes      String?     // for special requests or preferences
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?    @updatedAt
+  bookings   Booking[]
+}
+
+model Booking {
+  id           Int        @id @default(autoincrement())
+  serviceId    Int
+  customerId   Int
+  service      Service    @relation(fields: [serviceId], references: [id])
+  customer     Customer   @relation(fields: [customerId], references: [id])
+  date         DateTime
+  duration     Int         // in minutes, can differ from service default
+  status       BookingStatus @default(PENDING)
+  notes        String?
+  totalPrice   Float?
+  extraCost    Float?    @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime?    @updatedAt
+  food         Boolean
+  drink        Boolean
+  paid         Boolean
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Settings {
+  id           Int        @id @default(autoincrement())
+  openingHour Int @default(9)
+  closingHour Int @default(18)
+  workingDays  String[]   @default([])
+  foodPrice    Float?
+  drinkPrice   Float?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime?  @updatedAt
+}
