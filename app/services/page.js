@@ -1,11 +1,13 @@
+import { getServices } from "@/lib/services";
 import ServiceCard from "../_components/ServiceCard";
 
-export default function Page() {
-  const services = [];
+export default async function Page() {
+  const services = await getServices();
+
   return (
     <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
-        Our Luxury Cabins
+        Our Luxury Spa
       </h1>
       <p className="text-primary-200 text-lg mb-10">
         From therapeutic massage and herbal treatments to salt pools, sauna

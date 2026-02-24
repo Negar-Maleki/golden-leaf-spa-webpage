@@ -3,13 +3,13 @@ import Link from "next/link";
 import { UsersIcon } from "@heroicons/react/24/solid";
 
 function ServiceCard({ service }) {
-  const { id, name, maxCapacity, regularPrice, discount, image } = service;
+  const { id, name, maxCapacity, regularPrice, discount, imageUrl } = service;
 
   return (
     <div className="flex border-primary-800 border">
       <div className="flex-1 relative">
         <Image
-          src={image}
+          src={`/${imageUrl}`}
           fill
           alt={`Service ${name}`}
           className="object-cover border-r border-primary-800"
@@ -19,7 +19,7 @@ function ServiceCard({ service }) {
       <div className="flex-grow">
         <div className="pt-5 pb-4 px-7 bg-primary-950">
           <h3 className="text-accent-500 font-semibold text-2xl mb-3">
-            Service {name}
+            {name}
           </h3>
 
           <div className="flex gap-3 items-center mb-2">
