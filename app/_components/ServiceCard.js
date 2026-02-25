@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { UsersIcon } from "@heroicons/react/24/solid";
+import { ClockIcon } from "@heroicons/react/24/solid";
 
 function ServiceCard({ service }) {
-  const { id, name, maxCapacity, regularPrice, discount, imageUrl } = service;
+  const { id, name, duration, price, imageUrl } = service;
 
   return (
     <div className="flex border-primary-800 border">
@@ -23,26 +23,16 @@ function ServiceCard({ service }) {
           </h3>
 
           <div className="flex gap-3 items-center mb-2">
-            <UsersIcon className="h-5 w-5 text-primary-600" />
+            <ClockIcon className="h-5 w-5 text-primary-600" />
             <p className="text-lg text-primary-200">
-              For up to <span className="font-bold">{maxCapacity}</span> guests
+              For up to <span className="font-bold">{duration}</span> minutes
             </p>
           </div>
 
           <p className="flex gap-3 justify-end items-baseline">
-            {discount > 0 ? (
-              <>
-                <span className="text-3xl font-[350]">
-                  ${regularPrice - discount}
-                </span>
-                <span className="line-through font-semibold text-primary-600">
-                  ${regularPrice}
-                </span>
-              </>
-            ) : (
-              <span className="text-3xl font-[350]">${regularPrice}</span>
-            )}
-            <span className="text-primary-200">/ night</span>
+            <span className="text-3xl font-[350]">${price}</span>
+
+            <span className="text-primary-200">/ minutes</span>
           </p>
         </div>
 

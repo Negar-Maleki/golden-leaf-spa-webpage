@@ -1,9 +1,8 @@
-import { getServices } from "@/lib/services";
-import ServiceCard from "../_components/ServiceCard";
+import ServiceList from "@/app/_components/ServiceList";
+import { Suspense } from "react";
+import Spinner from "../_components/Spinner";
 
-export default async function Page() {
-  const services = await getServices();
-
+export default function Page() {
   return (
     <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
@@ -18,13 +17,9 @@ export default async function Page() {
         wellness is not just a treatment — it&apos;s a feeling. A quiet moment.
         A warm glow. A breath of serenity.
       </p>
-      {services.length > 0 && (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          {services.map((service) => (
-            <ServiceCard service={service} key={service.id} />
-          ))}
-        </div>
-      )}
+      <Suspense fallback={<Spinner />}>
+        <ServiceList />
+      </Suspense>
     </div>
   );
 }
