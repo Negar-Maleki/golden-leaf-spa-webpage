@@ -32,7 +32,7 @@ function ServiceCard({ service }) {
           <p className="flex gap-3 justify-end items-baseline">
             <span className="text-3xl font-[350]">${price}</span>
 
-            <span className="text-primary-200">/ minutes</span>
+            <span className="text-primary-200">/ {duration} minutes</span>
           </p>
         </div>
 

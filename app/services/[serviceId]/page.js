@@ -1,4 +1,4 @@
-import { getServiceById } from "@/lib/services";
+import { getServiceById, getServices } from "@/lib/services";
 import { EyeSlashIcon, MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 
@@ -6,6 +6,16 @@ export async function generateMetadata({ params }) {
   const { name } = await getServiceById(Number(params.serviceId));
 
   return { title: `${name}` };
+}
+
+export async function generateStaticParams() {
+  const services = await getServices();
+
+  const ids = services.map((service) => ({
+    serviceId: String(service.id),
+  }));
+
+  return ids;
 }
 
 export default async function Page({ params }) {

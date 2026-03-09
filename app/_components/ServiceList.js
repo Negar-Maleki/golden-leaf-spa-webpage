@@ -1,7 +1,9 @@
+// import { unstable_noStore } from "next/cache";
 import ServiceCard from "../_components/ServiceCard";
 import { getServices } from "@/lib/services";
 
 async function ServiceList() {
+  // unstable_noStore();
   const services = await getServices();
 
   if (!services.length) return null;
