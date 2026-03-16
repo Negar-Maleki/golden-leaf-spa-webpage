@@ -1,6 +1,7 @@
 import ServiceList from "@/app/_components/ServiceList";
 import { Suspense } from "react";
 import Spinner from "../_components/Spinner";
+import Filter from "../_components/Filter";
 
 export const revalidate = 3600;
 
@@ -8,7 +9,8 @@ export const metadata = {
   title: "Services",
 };
 
-export default function Page() {
+export default function Page({ searchParams }) {
+  const filter = searchParams?.duration ?? "all";
   return (
     <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
@@ -23,8 +25,11 @@ export default function Page() {
         wellness is not just a treatment — it&apos;s a feeling. A quiet moment.
         A warm glow. A breath of serenity.
       </p>
-      <Suspense fallback={<Spinner />}>
-        <ServiceList />
+      <div className="flex justify-end mb-8">
+        <Filter />
+      </div>
+      <Suspense fallback={<Spinner />} key={filter}>
+        <ServiceList filter={filter} />
       </Suspense>
     </div>
   );

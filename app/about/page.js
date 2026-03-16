@@ -1,10 +1,14 @@
 import Image from "next/image";
 import image1 from "@/public/image1.png";
+import { getServices } from "@/lib/services";
+
+export const revalidate = 86400;
 
 export const metadata = {
   title: "About",
 };
-export default function Page() {
+
+export default async function Page() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-x-24 gap-y-32 text-lg items-center">
       <div className="col-span-3">
