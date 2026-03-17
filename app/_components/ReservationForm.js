@@ -1,9 +1,9 @@
-function ReservationForm() {
-  // CHANGE
-  const maxCapacity = 23;
+"use client";
+function ReservationForm({ service }) {
+  const maxCapacity = 12;
 
   return (
-    <div className="scale-[1.01] col-span-2">
+    <div className="scale-[1.01] ">
       <div className="bg-primary-800 text-primary-300 px-16 py-2 flex justify-between items-center">
         <p>Logged in as</p>
 

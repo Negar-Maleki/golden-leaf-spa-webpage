@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDateTimePicker } from "@mui/x-date-pickers/StaticDateTimePicker";
+import { useEffect } from "react";
+import { useReservation } from "./ReservationContext";
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -13,25 +15,52 @@ function isAlreadyBooked(range, datesArr) {
     )
   );
 }
-const sevenPM = dayjs().set("hour", 19).startOf("hour");
-const nineAM = dayjs().set("hour", 9).startOf("hour");
-export default function ResponsiveDateTimePickers() {
+
+const tomorrow = dayjs().add(1, "day").startOf("day");
+const initialValue = tomorrow.hour(9).minute(0);
+const sixPM = dayjs().startOf("day").hour(18);
+
+export default function ResponsiveDateTimePickers({
+  settings,
+  booking,
+  service,
+}) {
   const price = 23;
   const numGuests = 1;
   const servicePrice = 23;
   const range = { from: null, to: null };
 
+  const { date, setDate, resetDate } = useReservation();
+
+  useEffect(() => {
+    if (!date) {
+      setDate(initialValue);
+    }
+  }, [date, setDate]);
+
   return (
-    <div className="flex flex-col justify-between  ">
+    <div className="flex flex-col justify-between max-w-[20rem] ">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div className="text-primary-950" components={["StaticDateTimePicker"]}>
           <StaticDateTimePicker
-            defaultValue={dayjs("2022-04-17T15:30")}
-            minTime={nineAM}
-            maxTime={sevenPM}
+            maxTime={sixPM}
+            minDate={tomorrow}
+            shouldDisableTime={(timeValue, view) => {
+              if (view === "hours") {
+                const hour = timeValue.hour();
+                return hour < 9 || hour > 18;
+              }
+
+              return false;
+            }}
+            value={date || initialValue}
+            onChange={(newValue) => {
+              if (!newValue) return;
+              setDate(newValue);
+              console.log(newValue.format("YYYY-MM-DDTHH:mm"));
+            }}
             sx={{
               "& .MuiPickersLayout-root": {
-                backgroundColor: "#fff",
                 color: "#1f2937",
               },
               "& .MuiPickersDay-root": {
