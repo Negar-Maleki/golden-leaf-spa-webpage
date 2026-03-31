@@ -1,7 +1,7 @@
 import Reservation from "@/app/_components/Reservation";
 import Service from "@/app/_components/Service";
 import Spinner from "@/app/_components/Spinner";
-import { getServiceById, getServices } from "@/lib/services";
+import { getServiceById, getServices } from "@/app/_lib/services";
 
 import { Suspense } from "react";
 

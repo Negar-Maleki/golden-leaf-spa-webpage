@@ -1,8 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { getServices } from "@/app/_lib/services";
 
 export async function GET() {
-  const settings = await prisma.settings.findMany({
-    orderBy: { id: "asc" },
-  });
+  const settings = await getServices();
   return Response.json(settings);
 }

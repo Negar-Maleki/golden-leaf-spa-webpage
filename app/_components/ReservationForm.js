@@ -1,11 +1,16 @@
 "use client";
-function ReservationForm({ service }) {
+
+import { useReservation } from "./ReservationContext";
+
+function ReservationForm({ service, userName }) {
   const maxCapacity = 12;
 
+  const { date } = useReservation();
+  console.log();
   return (
     <div className="scale-[1.01] ">
-      <div className="bg-primary-800 text-primary-300 px-16 py-2 flex justify-between items-center">
-        <p>Logged in as</p>
+      <div className="bg-primary-800 text-primary-300 px-2 py-2 flex justify-between items-center">
+        <p>Logged in as {userName}</p>
 
         {/* <div className='flex gap-4 items-center'>
           <img
@@ -18,6 +23,12 @@ function ReservationForm({ service }) {
           <p>{user.name}</p>
         </div> */}
       </div>
+      <p className="px-2">
+        You are reserving <span className="font-bold">{service.name}</span> on{" "}
+        <span className="font-bold">
+          {date.$d ? date.format("MMMM Do YYYY, h:mm a") : "..."}
+        </span>
+      </p>
 
       <form className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col ">
         <div className="space-y-2">

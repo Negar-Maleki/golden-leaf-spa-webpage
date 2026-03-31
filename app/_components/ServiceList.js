@@ -1,6 +1,6 @@
 // import { unstable_noStore } from "next/cache";
 import ServiceCard from "../_components/ServiceCard";
-import { getServices } from "@/lib/services";
+import { getServices } from "@/app/_lib/services";
 
 async function ServiceList({ filter }) {
   // unstable_noStore();

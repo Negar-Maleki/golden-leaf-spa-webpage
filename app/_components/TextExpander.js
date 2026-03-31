@@ -5,7 +5,7 @@ function TextExpander({ children }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const displayText = isExpanded
     ? children
-    : children.split(" ").slice(0, 15).join(" ") + "...";
+    : children.split(" ").slice(0, 18).join(" ") + "...";
 
   return (
     <span>

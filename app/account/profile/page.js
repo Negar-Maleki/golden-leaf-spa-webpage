@@ -1,12 +1,15 @@
 import UpdateProfileForm from "@/app/_components/UpdateProfileForm";
+import { getCustomer } from "@/app/_lib/apiCustomers";
+import { auth } from "@/app/_lib/auth";
 
 export const metadata = {
   title: "Update profile",
 };
-export default function Page() {
-  // CHANGE
-  const countryFlag = "pt.jpg";
-  const nationality = "portugal";
+export default async function Page() {
+  const session = await auth();
+  if (!session) redirect("/login");
+
+  const guest = await getCustomer(session.user.email);
 
   return (
     <div>
@@ -18,7 +21,7 @@ export default function Page() {
         Providing the following information will make your check-in process
         faster and smoother. See you soon!
       </p>
-      <UpdateProfileForm />
+      <UpdateProfileForm guest={guest} />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDateTimePicker } from "@mui/x-date-pickers/StaticDateTimePicker";
 import { useEffect } from "react";
 import { useReservation } from "./ReservationContext";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -28,8 +29,7 @@ export default function ResponsiveDateTimePickers({
   const price = 23;
   const numGuests = 1;
   const servicePrice = 23;
-  const range = { from: null, to: null };
-
+  console.log(service);
   const { date, setDate, resetDate } = useReservation();
 
   useEffect(() => {
@@ -39,79 +39,68 @@ export default function ResponsiveDateTimePickers({
   }, [date, setDate]);
 
   return (
-    <div className="flex flex-col justify-between max-w-[20rem] ">
+    <div className="flex  items-center justify-between bg-accent-500 text-primary-800 h-[72px] gap-8 px-4 rounded-sm ">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="text-primary-950" components={["StaticDateTimePicker"]}>
-          <StaticDateTimePicker
-            maxTime={sixPM}
-            minDate={tomorrow}
-            shouldDisableTime={(timeValue, view) => {
-              if (view === "hours") {
-                const hour = timeValue.hour();
-                return hour < 9 || hour > 18;
-              }
+        <DateTimePicker
+          maxTime={sixPM}
+          minDate={tomorrow}
+          shouldDisableTime={(timeValue, view) => {
+            if (view === "hours") {
+              const hour = timeValue.hour();
+              return hour < 9 || hour > 18;
+            }
 
-              return false;
-            }}
-            value={date || initialValue}
-            onChange={(newValue) => {
-              if (!newValue) return;
-              setDate(newValue);
-              console.log(newValue.format("YYYY-MM-DDTHH:mm"));
-            }}
-            sx={{
-              "& .MuiPickersLayout-root": {
-                color: "#1f2937",
-              },
-              "& .MuiPickersDay-root": {
-                borderRadius: "8px",
-                fontWeight: 500,
-              },
-              "& .MuiPickersDay-root.Mui-selected": {
-                backgroundColor: "#d97706",
-                color: "white",
-              },
-              "& .MuiButtonBase-root": {
-                fontFamily: "inherit",
-              },
-              "& .MuiTypography-root": {
-                fontFamily: "inherit",
-              },
-            }}
-          />
-        </div>
+            return false;
+          }}
+          value={date || initialValue}
+          onChange={(newValue) => {
+            if (!newValue) return;
+            setDate(newValue);
+          }}
+          sx={{
+            "& .MuiPickersLayout-root": {
+              color: "#1f2937",
+            },
+            "& .MuiPickersDay-root": {
+              borderRadius: "8px",
+              fontWeight: 500,
+            },
+            "& .MuiPickersDay-root.Mui-selected": {
+              backgroundColor: "#d97706",
+              color: "white",
+            },
+            "& .MuiButtonBase-root": {
+              fontFamily: "inherit",
+            },
+            "& .MuiTypography-root": {
+              fontFamily: "inherit",
+            },
+          }}
+        />
       </LocalizationProvider>
 
-      <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
-        <div className="flex items-center gap-6">
-          <p className="flex gap-2 items-baseline">
-            <span className="text-2xl">${price}</span>
+      <div className="flex items-center gap-6">
+        <p className="flex gap-2 items-baseline">
+          <span className="text-2xl">{service.duration}</span>
 
-            <span className="">/minutes</span>
-          </p>
-          {numGuests ? (
-            <>
-              <p className="bg-accent-600 px-3 py-2 text-2xl">
-                <span>&times;{numGuests}</span>
-              </p>
-              <p>
-                <span className="text-lg font-bold uppercase">
-                  Total ${servicePrice}
-                </span>
-              </p>
-            </>
-          ) : null}
-        </div>
+          <span className=""> minutes</span>
+        </p>
 
-        {range.from || range.to ? (
-          <button
-            className="border border-primary-800 py-2 px-4 text-sm font-semibold"
-            onClick={() => resetRange()}
-          >
-            Clear
-          </button>
-        ) : null}
+        <p>
+          <span className="text-lg font-bold uppercase">
+            Total ${service.price}
+          </span>
+        </p>
       </div>
+
+      {/* {date ? (
+        <button
+          className="border border-primary-800 py-2 px-4 text-sm font-semibold"
+          onClick={() => resetDate()}
+        >
+          Clear
+        </button>
+      ) : null} */}
     </div>
   );
 }

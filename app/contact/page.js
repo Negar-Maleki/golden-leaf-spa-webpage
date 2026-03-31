@@ -1,6 +1,6 @@
 import Image from "next/image";
 import image1 from "@/public/image1.png";
-import { getServices } from "@/lib/services";
+import { getServices } from "@/app/_lib/services";
 
 export const revalidate = 86400;
 

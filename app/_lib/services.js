@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/app/_lib/prisma";
 import { notFound } from "next/navigation";
 
 export async function getServices() {

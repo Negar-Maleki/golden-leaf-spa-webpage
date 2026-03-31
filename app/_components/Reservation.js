@@ -1,17 +1,24 @@
 import DateSelector from "@/app/_components/DateSelector";
 import ReservationForm from "@/app/_components/ReservationForm";
-import { getAllBookings, getBookingById } from "@/lib/apiBookings";
-import { getSettings } from "@/lib/apiSettings";
+import { getBookingById } from "@/app/_lib/apiBookings";
+import { getSettings } from "@/app/_lib/apiSettings";
+import { auth } from "../_lib/auth";
+import LoginMessage from "./LoginMessage";
 
 async function Reservation({ service }) {
   const booking = await getBookingById(service.id);
-  const settings = await getSettings()
-
+  const settings = await getSettings();
+  const session = await auth();
+  console.log(session);
   return (
-  <div className="grid grid-cols-1 lg:grid-cols-[20rem_1fr] justify-items-center gap-8 mt-12 border border-primary-800 min-h-[400px]">
-  <DateSelector settings={settings} booking={booking} service={service}/>
-    <ReservationForm service={service} />
-</div>
+    <div className="grid grid-rows-1 lg:grid-cols-[31.5rem_1fr] justify-items-center mt-12 gap-2 border border-primary-800 min-h-[400px]">
+      <DateSelector settings={settings} booking={booking} service={service} />
+      {session?.user ? (
+        <ReservationForm service={service} userName={session.user.name} />
+      ) : (
+        <LoginMessage />
+      )}
+    </div>
   );
 }
 

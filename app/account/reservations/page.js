@@ -1,11 +1,15 @@
 import ReservationCard from "@/app/_components/ReservationCard";
+import { getBookingById } from "@/app/_lib/apiBookings";
+import { auth } from "@/app/_lib/auth";
 
 export const metadata = {
   title: "Reservations",
 };
 
-export default function Page() {
-  const bookings = [];
+export default async function Page() {
+  const session = await auth();
+  const bookings = await getBookingById(session.user.id);
+  console.log(" bookings: ", bookings);
 
   return (
     <div>
@@ -17,7 +21,7 @@ export default function Page() {
         <p className="text-lg">
           You have no reservations yet. Check out our{" "}
           <a className="underline text-accent-500" href="/cabins">
-            luxury cabins &rarr;
+            pleasure services &rarr;
           </a>
         </p>
       ) : (
