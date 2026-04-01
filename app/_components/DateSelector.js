@@ -21,15 +21,7 @@ const tomorrow = dayjs().add(1, "day").startOf("day");
 const initialValue = tomorrow.hour(9).minute(0);
 const sixPM = dayjs().startOf("day").hour(18);
 
-export default function ResponsiveDateTimePickers({
-  settings,
-  booking,
-  service,
-}) {
-  const price = 23;
-  const numGuests = 1;
-  const servicePrice = 23;
-  console.log(service);
+export default function ResponsiveDateTimePickers({ service }) {
   const { date, setDate, resetDate } = useReservation();
 
   useEffect(() => {

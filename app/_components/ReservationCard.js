@@ -4,10 +4,22 @@ import DeleteReservation from "./DeleteReservation";
 import Image from "next/image";
 import Link from "next/link";
 
-export const formatDistanceFromNow = (dateStr) =>
-  formatDistance(parseISO(dateStr), new Date(), {
+export const formatDistanceFromNow = (dateInput) => {
+  if (!dateInput) return "";
+
+  const date =
+    typeof dateInput === "string"
+      ? parseISO(dateInput)
+      : dateInput instanceof Date
+        ? dateInput
+        : null;
+
+  if (!date || Number.isNaN(date.getTime())) return "";
+
+  return formatDistance(date, new Date(), {
     addSuffix: true,
   }).replace("about ", "");
+};
 
 function ReservationCard({ booking }) {
   const {
@@ -23,16 +35,16 @@ function ReservationCard({ booking }) {
     totalPrice,
     createdAt,
   } = booking;
-  console.log(booking);
+  console.log(service.imageUrl);
   return (
     <div className="flex border border-primary-800">
       <div className="relative h-32 aspect-square">
-        {/* <Image
-          src={image}
-          alt={`Cabin ${name}`}
+        <Image
+          src={`/${service.imageUrl}`}
+          alt={`Service ${service.name}`}
           className="object-cover border-r border-primary-800"
           fill
-        /> */}
+        />
       </div>
 
       <div className="flex-grow px-6 py-3 flex flex-col">
@@ -40,7 +52,7 @@ function ReservationCard({ booking }) {
           <h3 className="text-xl font-semibold">
             {duration} minutes {service.name}
           </h3>
-          {isPast(new Date(startDate)) ? (
+          {isPast(new Date(date)) ? (
             <span className="bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm">
               past
             </span>
@@ -52,11 +64,8 @@ function ReservationCard({ booking }) {
         </div>
 
         <p className="text-lg text-primary-300">
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
-            ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+          {format(new Date(date), "EEE, MMM dd yyyy")} (
+          {isToday(new Date(date)) ? "Today" : formatDistanceFromNow(date)})
         </p>
 
         <div className="flex gap-5 mt-auto items-baseline">

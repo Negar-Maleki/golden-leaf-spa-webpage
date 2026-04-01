@@ -12,15 +12,20 @@ export async function getAllBookings() {
 }
 
 export async function getBookingById(id) {
-  const booking = await prisma.booking.findMany({
+  if (!id) {
+    return [];
+  }
+
+  const bookings = await prisma.booking.findMany({
     where: {
-      serviceId: id,
+      customerId: id,
+    },
+    include: {
+      service: true,
     },
   });
-  if (!booking) {
-    notFound();
-  }
-  return booking;
+
+  return bookings;
 }
 
 // export async function getAllBookings() {

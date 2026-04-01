@@ -12,6 +12,6 @@ export async function getCustomer(email) {
   const customer = await prisma.customer.findUnique({
     where: { email },
   });
-  console.log("getCustomer result:", customer);
+
   return customer;
 }

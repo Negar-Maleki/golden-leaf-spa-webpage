@@ -28,30 +28,31 @@ export async function updateGuest(formData) {
   revalidatePath("/account/profile");
 }
 
-// export async function createBooking(bookingData, formData) {
-//   const session = await auth();
-//   if (!session) throw new Error("You must be logged in to create a booking");
+export async function createBooking(bookingData, formData) {
+  const session = await auth();
+  if (!session || !session.user?.id)
+    throw new Error("You must be logged in to create a booking");
 
-//   const newBooking = {
-//     ...bookingData,
-//     customerId: session.user.guestId,
-//     note: formData.get("note").slice(0, 1000),
-//     extrasPrice: 0,
-//     totalPrice: bookingData.servicePrice,
-//     isPaid: false,
-//     food: false,
-//     drink: false,
-//     status: "unconfirmed",
-//   };
+  const notes = (formData.get("notes") ?? "").toString().slice(0, 1000);
 
-//   await prisma.booking.create({ data: newBooking });
+  const booking = await prisma.booking.create({
+    data: {
+      serviceId: bookingData.serviceId,
+      customerId: session.user.id,
+      date: new Date(bookingData.date),
+      duration: bookingData.duration,
+      status: "PENDING",
+      notes: notes || null,
+      totalPrice: bookingData.servicePrice,
+      extraCost: 0,
+      food: false,
+      drink: false,
+      paid: false,
+    },
+  });
 
-//   if (error) throw new Error("Booking could not be created");
-
-//   revalidatePath(`/cabins/${bookingData.cabinId}`);
-
-//   redirect("/cabins/thankyou");
-// }
+  if (!booking) throw new Error("Booking could not be created");
+}
 
 export async function signInAction() {
   await signIn("google", { redirectTo: "/account" });
