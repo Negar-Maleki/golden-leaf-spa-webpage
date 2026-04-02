@@ -1,28 +1,25 @@
 "use client";
 import dayjs from "dayjs";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { StaticDateTimePicker } from "@mui/x-date-pickers/StaticDateTimePicker";
-import { useEffect } from "react";
+
 import { useReservation } from "./ReservationContext";
 import { DateTimePicker } from "@mui/x-date-pickers";
-
-function isAlreadyBooked(range, datesArr) {
-  return (
-    range.from &&
-    range.to &&
-    datesArr.some((date) =>
-      isWithinInterval(date, { start: range.from, end: range.to }),
-    )
-  );
-}
+import { CLOSE_HOUR, OPEN_HOUR } from "../_utils/constants";
+import { useEffect } from "react";
+import { canFitBooking, getDisabledTimeSlots } from "../_utils/helpers";
 
 const tomorrow = dayjs().add(1, "day").startOf("day");
-const initialValue = tomorrow.hour(9).minute(0);
-const sixPM = dayjs().startOf("day").hour(18);
+const initialValue = tomorrow.hour(OPEN_HOUR).minute(0);
 
-export default function ResponsiveDateTimePickers({ service }) {
-  const { date, setDate, resetDate } = useReservation();
+export default function ResponsiveDateTimePickers({
+  service,
+  bookedDates,
+  bookings,
+  requestedGuests = 1,
+}) {
+  const { date, setDate } = useReservation();
 
   useEffect(() => {
     if (!date) {
@@ -30,16 +27,53 @@ export default function ResponsiveDateTimePickers({ service }) {
     }
   }, [date, setDate]);
 
+  const minTime = dayjs().hour(OPEN_HOUR).minute(0).second(0).millisecond(0);
+  const maxTime = dayjs().hour(CLOSE_HOUR).minute(0).second(0).millisecond(0);
+
+  const selectedBaseDay = (date || initialValue).second(0).millisecond(0);
+
   return (
     <div className="flex  items-center justify-between bg-accent-500 text-primary-800 h-[72px] gap-8 px-4 rounded-sm ">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
-          maxTime={sixPM}
+          maxTime={maxTime}
+          minTime={minTime}
           minDate={tomorrow}
-          shouldDisableTime={(timeValue, view) => {
+          timeSteps={{ hours: 1, minutes: 15 }}
+          shouldDisableTime={(value, view) => {
+            if (view === "minutes") {
+              const minute = value.minute();
+
+              if (![0, 15, 30, 45].includes(minute)) {
+                return true;
+              }
+
+              const candidate = selectedBaseDay
+                .minute(minute)
+                .second(0)
+                .millisecond(0);
+              return !canFitBooking({
+                bookings,
+                proposedStart: dayjs.utc(candidate.toDate().toISOString()),
+                serviceDuration: Number(service.duration),
+                requestedGuests: Number(requestedGuests),
+              });
+            }
             if (view === "hours") {
-              const hour = timeValue.hour();
-              return hour < 9 || hour > 18;
+              const hour = value.hour();
+
+              const candidate = selectedBaseDay
+                .hour(hour)
+                .minute(selectedBaseDay.minute())
+                .second(0)
+                .millisecond(0);
+
+              return !canFitBooking({
+                bookings,
+                proposedStart: dayjs.utc(candidate.toDate().toISOString()),
+                serviceDuration: Number(service.duration),
+                requestedGuests: Number(requestedGuests),
+              });
             }
 
             return false;

@@ -3,6 +3,7 @@ import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
 import DeleteReservation from "./DeleteReservation";
 import Image from "next/image";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 export const formatDistanceFromNow = (dateInput) => {
   if (!dateInput) return "";
@@ -35,7 +36,16 @@ function ReservationCard({ booking }) {
     totalPrice,
     createdAt,
   } = booking;
-  console.log(service.imageUrl);
+
+  function getDateStatus(dateInput) {
+    const date = dayjs(dateInput);
+    const now = dayjs();
+
+    if (date.isSame(now, "day")) return "today";
+    if (date.isBefore(now)) return "past";
+    return "future";
+  }
+
   return (
     <div className="flex border border-primary-800">
       <div className="relative h-32 aspect-square">
@@ -52,7 +62,7 @@ function ReservationCard({ booking }) {
           <h3 className="text-xl font-semibold">
             {duration} minutes {service.name}
           </h3>
-          {isPast(new Date(date)) ? (
+          {getDateStatus(date) === "past" ? (
             <span className="bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm">
               past
             </span>
@@ -65,7 +75,10 @@ function ReservationCard({ booking }) {
 
         <p className="text-lg text-primary-300">
           {format(new Date(date), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(date)) ? "Today" : formatDistanceFromNow(date)})
+          {getDateStatus(date) === "today"
+            ? "Today"
+            : formatDistanceFromNow(date)}
+          )
         </p>
 
         <div className="flex gap-5 mt-auto items-baseline">
@@ -79,7 +92,7 @@ function ReservationCard({ booking }) {
       </div>
 
       <div className="flex flex-col border-l border-primary-800 w-[100px]">
-        {!isPast ? (
+        {getDateStatus(date) !== "past" ? (
           <>
             <Link
               href={`/account/reservations/edit/${id}`}

@@ -37,7 +37,7 @@ export default async function Page() {
 
           <div>
             <h2 className="font-semibold text-lg">Email</h2>
-            <p className="text-gray-400">info@serenityspa.com</p>
+            <p className="text-gray-400">info@goldenleafspa.com</p>
           </div>
 
           <div>

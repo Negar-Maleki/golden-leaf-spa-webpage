@@ -1,5 +1,3 @@
-// import { LIST_SIZE } from "../utils/constants";
-
 export async function getAllBookings() {
   const bookings = await prisma.booking.findMany({
     orderBy: { id: "asc" },
@@ -27,7 +25,32 @@ export async function getBookingById(id) {
 
   return bookings;
 }
+export async function getBookingByBookingId(id) {
+  if (!id) {
+    return [];
+  }
 
+  const booking = await prisma.booking.findUnique({
+    where: {
+      id: parseInt(id),
+    },
+    include: {
+      service: true,
+    },
+  });
+
+  return booking;
+}
+
+export async function getBookedDatesById(id) {
+  // let today = new Date();
+  const data = await prisma.booking.findMany({
+    where: {
+      serviceId: id,
+    },
+  });
+  return data;
+}
 // export async function getAllBookings() {
 //   const res = await fetch("http://localhost:5000/api/bookings", {
 //     credentials: "include",
