@@ -7,7 +7,7 @@ import { getCustomer } from "./apiCustomers";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { canFitBooking } from "../_utils/helpers";
-import { redirect } from "next/dist/server/api-utils";
+import { redirect } from "next/navigation";
 import { getBookingById } from "./apiBookings";
 
 dayjs.extend(utc);
@@ -147,21 +147,32 @@ export async function deleteBooking(bookingId) {
   revalidatePath("/account/reservations");
 }
 
-export async function updateBooking(bookingId) {
+export async function updateBooking(formData) {
   const session = await auth();
   if (!session) throw new Error("Unauthorized");
 
   const guestBookings = await getBookingById(session.user.id);
   const guestBookingsIds = guestBookings.map((booking) => booking.id);
 
-  if (!guestBookingsIds.includes(bookingId)) {
-    throw new Error("You are not allow to edit this booking!");
-  }
-  const findBooking = guestBookings.filter(
-    (booking) => booking.id === bookingId,
-  );
+  const { numGuests, notes } = Object.fromEntries(formData);
+  const bookingId = Number(formData.get("bookingId"));
 
-  const edit = await prisma.booking.update({});
+  if (!guestBookingsIds.includes(bookingId)) {
+    throw new Error("You are not allow to update this booking!");
+  }
+
+  const edit = await prisma.booking.update({
+    where: { id: bookingId },
+    data: {
+      numGuests: Number(numGuests),
+      notes: notes.slice(0, 1000),
+    },
+  });
+
+  revalidatePath("/account/reservations");
+  revalidatePath(`/account/reservations/edit/${bookingId}`);
+
+  redirect("/account/reservations");
 }
 
 export async function signInAction() {
