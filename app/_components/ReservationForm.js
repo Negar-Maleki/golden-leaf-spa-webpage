@@ -5,17 +5,21 @@ import { createBooking } from "../_lib/actions";
 import { MAX_CAPACITY } from "../_utils/constants";
 import { useReservation } from "./ReservationContext";
 import SubmitButton from "./SubmitButton";
+import Image from "next/image";
 
 function ReservationForm({ service, user }) {
   const { date, resetDate } = useReservation();
   const [isBooking, setIsBooking] = useState(false);
+  const [numGuest, setNumsGuest] = useState(0);
 
   function handleGuests(e) {
     const value = e.target.value;
+    setNumsGuest(value);
     if (value > 0) {
       setIsBooking(true);
     }
   }
+
   const {
     duration,
     price: servicePrice,
@@ -42,11 +46,13 @@ function ReservationForm({ service, user }) {
         <p>Logged in as {user.name}</p>
 
         <div className="flex gap-4 items-center">
-          <img
+          <Image
             referrerPolicy="no-referrer"
             className="h-8 rounded-full"
             src={user.image}
             alt={user.name}
+            width="30"
+            height="60"
           />
           <p>{user.name}</p>
         </div>
@@ -105,15 +111,20 @@ function ReservationForm({ service, user }) {
           />
         </div>
 
-        <div className="flex justify-end items-center gap-6">
+        <div className="flex justify-between items-center">
           {!isBooking ? (
             <p className="text-primary-300 text-base">
               Start by selecting dates
             </p>
           ) : (
-            <SubmitButton pendingLabel="Reserving....">
-              Reserve now
-            </SubmitButton>
+            <>
+              <p className="text-base">{`Total amount for your resevation is £${numGuest * servicePrice}`}</p>
+              <div>
+                <SubmitButton pendingLabel="Reserving....">
+                  Reserve now
+                </SubmitButton>
+              </div>
+            </>
           )}
         </div>
       </form>

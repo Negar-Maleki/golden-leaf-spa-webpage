@@ -15,7 +15,6 @@ const initialValue = tomorrow.hour(OPEN_HOUR).minute(0);
 
 export default function ResponsiveDateTimePickers({
   service,
-  bookedDates,
   bookings,
   requestedGuests = 1,
 }) {
@@ -112,21 +111,11 @@ export default function ResponsiveDateTimePickers({
           <span className=""> minutes</span>
         </p>
 
-        <p>
-          <span className="text-lg font-bold uppercase">
-            Total ${service.price}
-          </span>
-        </p>
+        <div>
+          <span className="text-lg font-bold uppercase">£{service.price} </span>
+          <p>per guest </p>
+        </div>
       </div>
-
-      {/* {date ? (
-        <button
-          className="border border-primary-800 py-2 px-4 text-sm font-semibold"
-          onClick={() => resetDate()}
-        >
-          Clear
-        </button>
-      ) : null} */}
     </div>
   );
 }

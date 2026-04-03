@@ -139,7 +139,7 @@ export async function deleteBooking(bookingId) {
   }
 
   const deleted = await prisma.booking.delete({
-    where: { id: parseInt(bookingId) },
+    where: { id: Number(bookingId) },
   });
   if (!deleted) {
     throw new Error("Failed to delete booking");

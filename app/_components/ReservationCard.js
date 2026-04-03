@@ -22,7 +22,7 @@ export const formatDistanceFromNow = (dateInput) => {
   }).replace("about ", "");
 };
 
-function ReservationCard({ booking }) {
+function ReservationCard({ booking, onDelete }) {
   const {
     id,
     serviceId,
@@ -35,6 +35,7 @@ function ReservationCard({ booking }) {
     notes,
     totalPrice,
     createdAt,
+    numGuests,
   } = booking;
 
   function getDateStatus(dateInput) {
@@ -82,9 +83,11 @@ function ReservationCard({ booking }) {
         </p>
 
         <div className="flex gap-5 mt-auto items-baseline">
-          <p className="text-xl font-semibold text-accent-400">${totalPrice}</p>
+          <p className="text-xl font-semibold text-accent-400">£{totalPrice}</p>
           <p className="text-primary-300">&bull;</p>
-
+          <p className="text-lg text-primary-300">
+            {numGuests} guest{numGuests > 1 && "s"}
+          </p>
           <p className="ml-auto text-sm text-primary-400">
             Booked {format(new Date(createdAt), "EEE, MMM dd yyyy, p")}
           </p>
@@ -101,7 +104,7 @@ function ReservationCard({ booking }) {
               <PencilSquareIcon className="h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors" />
               <span className="mt-1">Edit</span>
             </Link>
-            <DeleteReservation bookingId={id} />
+            <DeleteReservation bookingId={booking.id} onDelete={onDelete} />
           </>
         ) : null}
       </div>
