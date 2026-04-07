@@ -66,8 +66,6 @@ This project focuses on **clean UI/UX**, **real-world booking flow**, and **mode
 
 ### 👤 Guest Profile
 
-![1775559216691](image/README/1775559216691.jpg)
-
 - Users can update:
   - Name
   - Email
@@ -97,7 +95,7 @@ This project focuses on **clean UI/UX**, **real-world booking flow**, and **mode
 
 ### 📩 Contact Page
 
-![Contact](./public/screenshots/contact.png)
+![1775559244459](image/README/1775559244459.jpg)
 
 - Displays:
   - Address
