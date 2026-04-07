@@ -115,7 +115,6 @@ This project focuses on **clean UI/UX**, **real-world booking flow**, and **mode
 - **Authentication:** Google OAuth
 - **Backend:** API routes (Next.js)
 - **Database:** Prisma ORM
-- **Deployment:** (Add yours if deployed)
 
 ---
 
