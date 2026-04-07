@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { updateGuest } from "../_lib/actions";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";

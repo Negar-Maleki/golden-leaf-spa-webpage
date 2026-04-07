@@ -1,6 +1,4 @@
-import Image from "next/image";
-import image1 from "@/public/image1.png";
-import { getServices } from "@/app/_lib/services";
+import MessageForm from "../_components/MessageForm";
 
 export const revalidate = 86400;
 
@@ -20,7 +18,6 @@ export default async function Page() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-12">
-        {/* Contact Info */}
         <div className="space-y-6">
           <div>
             <h2 className="font-semibold text-lg">Address</h2>
@@ -42,39 +39,11 @@ export default async function Page() {
 
           <div>
             <h2 className="font-semibold text-lg">Opening Hours</h2>
-            <p className="text-gray-400">
-              Mon – Fri: 9:00 AM – 7:00 PM <br />
-              Sat – Sun: 10:00 AM – 6:00 PM
-            </p>
+            <p className="text-gray-400">Mon – Sun: 9:00 AM – 5:00 PM</p>
           </div>
         </div>
 
-        <form className="space-y-4">
-          <input
-            type="text"
-            placeholder="Your Name"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring"
-          />
-
-          <input
-            type="email"
-            placeholder="Your Email"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring"
-          />
-
-          <textarea
-            placeholder="Your Message"
-            rows="5"
-            className="w-full border rounded-lg p-3 focus:outline-none focus:ring"
-          ></textarea>
-
-          <button
-            type="submit"
-            className="bg-accent-500 text-primary-800 px-6 py-3 rounded-lg hover:bg-accent-800 transition"
-          >
-            Send Message
-          </button>
-        </form>
+        <MessageForm />
       </div>
     </section>
   );

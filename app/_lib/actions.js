@@ -35,6 +35,22 @@ export async function updateGuest(formData) {
   revalidatePath("/account/profile");
 }
 
+export async function createMessage(formData) {
+  const { name, email, message } = Object.fromEntries(formData);
+  const newMessage = await prisma.message.create({
+    data: {
+      name,
+      email,
+      message,
+    },
+  });
+
+  if (!newMessage) throw new Error("Message could not be sent.");
+
+  revalidatePath("/contact");
+  redirect("/contact/thankyou");
+}
+
 export async function createBooking(bookingData, formData) {
   const session = await auth();
 
@@ -124,7 +140,7 @@ export async function createBooking(bookingData, formData) {
   revalidatePath(`/services/${bookingData.servicesId}`);
 
   redirect("/services/thankyou");
-  return booking;
+
 }
 
 export async function deleteBooking(bookingId) {
